@@ -4,4 +4,5 @@
     <string name="insert_your_name">Insert your name</string>
     <string name="insert_your_password">Insert your password</string>
     <string name="login">Login</string>
+    <string name="missing_fields_message">You should complete all fields</string>
 </resources>
