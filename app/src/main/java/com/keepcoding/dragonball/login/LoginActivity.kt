@@ -35,6 +35,8 @@ class LoginActivity : AppCompatActivity() {
                 is LoginViewModel.LoginActivityState.SuccessLogin -> {
                     saveToken(it.token)
                     binding.pbLoading?.visibility = View.INVISIBLE
+                    binding.etName.setText("")
+                    binding.etPassword.setText("")
                     CharactersActivity.launch(this)
                 }
                 is LoginViewModel.LoginActivityState.Loading -> {
@@ -72,11 +74,13 @@ class LoginActivity : AppCompatActivity() {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
     }
 
-    fun saveToken(token:String){
-        with(getPreferences(Context.MODE_PRIVATE)){
+    private fun saveToken(token:String){
+
+        with(getSharedPreferences("SharedPreferences",Context.MODE_PRIVATE)){
             val editPreferences = edit()
             editPreferences.putString("Token",token)
             editPreferences.apply()
+            println("Token guardado ${token}")
         }
     }
 
