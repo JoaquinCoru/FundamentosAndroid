@@ -18,7 +18,7 @@
         <ImageView
             android:id="@+id/ivCharacter"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
             app:layout_constraintEnd_toEndOf="parent"
@@ -42,7 +42,7 @@
             android:id="@+id/tvHealth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="Vida: 100"
+            android:text="Vida: 100"
             style="@style/TextAppearance.AppCompat.Subhead"
             android:textStyle="italic"
             app:layout_constraintTop_toBottomOf="@id/tvName"

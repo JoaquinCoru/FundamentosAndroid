@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.bumptech.glide.Glide
 import com.keepcoding.dragonball.R
 import com.keepcoding.dragonball.characters.list.ListFragment
 import com.keepcoding.dragonball.databinding.FragmentBattleBinding
@@ -33,6 +34,19 @@ class BattleFragment(private val character:DbCharacter) : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setListeners()
+
+        binding.lySelectedCharacter.apply {
+            tvName.text = character.name
+            tvHealth.text ="Vida: ${character.currentLife}"
+            Glide.with(requireContext())
+                .load(character.photo)
+                .placeholder(R.drawable.balls_image)
+                .into(ivCharacter)
+        }
+
+        binding.pbHealth.progress = character.currentLife
+
+
         Toast.makeText(context,"Seleccionado ${character.name}",Toast.LENGTH_SHORT).show()
     }
 

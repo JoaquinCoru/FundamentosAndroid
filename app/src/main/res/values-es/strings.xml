@@ -6,4 +6,6 @@
     <string name="insert_your_password">Introduce tu contraseña</string>
     <string name="login">Entrar</string>
     <string name="missing_fields_message">Debe completar todos los campos</string>
+    <string name="seleccionar">Seleccionar</string>
+    <string name="back">Volver</string>
 </resources>
