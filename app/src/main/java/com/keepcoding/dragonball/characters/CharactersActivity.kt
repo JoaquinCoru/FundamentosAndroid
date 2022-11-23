@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.keepcoding.dragonball.characters.list.ListFragment
 import com.keepcoding.dragonball.databinding.ActivityCharactersBinding
 
 class CharactersActivity : AppCompatActivity() {

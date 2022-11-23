@@ -3,6 +3,7 @@ package com.keepcoding.dragonball.login
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -43,6 +44,7 @@ class LoginActivity : AppCompatActivity() {
                     binding.pbLoading?.visibility = View.VISIBLE
                 }
                 is LoginViewModel.LoginActivityState.Error -> {
+                    Log.d(LoginActivity::class.java.simpleName,"Error: ${it.message}")
                     showToast("Error: ${it.message}")
                     binding.pbLoading?.visibility = View.INVISIBLE
                 }

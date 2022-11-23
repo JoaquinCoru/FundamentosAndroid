@@ -17,6 +17,8 @@ class CharactersViewModel:ViewModel() {
         MutableLiveData<FragmentListState>()
     }
 
+    val selectedCharacter:MutableLiveData<DbCharacter> = MutableLiveData()
+
     fun getCharacters(token:String){
         println("Token: $token")
         setValueOnMainThreadToError(FragmentListState.Loading)
@@ -50,10 +52,10 @@ class CharactersViewModel:ViewModel() {
                         Log.d("Success", it)
                     }
 
-                    val charactersDtoArray:Array<CharacterDto> =Gson().fromJson(responseBody,Array<CharacterDto>::class.java)
+                    val charactersDtoArray:Array<DbCharacterDto> =Gson().fromJson(responseBody,Array<DbCharacterDto>::class.java)
 
                     val charactersArray = charactersDtoArray.map {
-                        Character(it.id, it.name, it.description,it.photo, it.favorite)
+                        DbCharacter(it.id, it.name, it.description,it.photo, it.favorite)
                     }
                     Log.d("Success", charactersArray.toString())
                     setValueOnMainThreadToError(FragmentListState.SuccessCharacters(charactersArray))
@@ -63,6 +65,10 @@ class CharactersViewModel:ViewModel() {
         })
     }
 
+    fun setSelectedCharacter(character: DbCharacter){
+        selectedCharacter.postValue(character)
+    }
+
     fun setValueOnMainThreadToError(value: FragmentListState) {
         viewModelScope.launch(Dispatchers.Main) {
             stateLiveData.value = value
@@ -70,7 +76,7 @@ class CharactersViewModel:ViewModel() {
     }
 
     sealed class FragmentListState{
-        data class SuccessCharacters(val characterList : List<Character>) : FragmentListState()
+        data class SuccessCharacters(val characterList : List<DbCharacter>) : FragmentListState()
         data class Error(val message : String): FragmentListState()
         object Loading : FragmentListState()
     }
