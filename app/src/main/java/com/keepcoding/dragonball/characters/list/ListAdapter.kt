@@ -42,7 +42,7 @@ class ListAdapter(var callback: ListAdapterCallback) : Adapter<ListAdapter.ListV
             }
 
             binding.root.setOnClickListener {
-                Toast.makeText(binding.root.context, item.name, Toast.LENGTH_SHORT).show()
+//                Toast.makeText(binding.root.context, item.name, Toast.LENGTH_SHORT).show()
                 selectedPosition = position
                 notifyDataSetChanged()
                 callback.onItemClicked(item)

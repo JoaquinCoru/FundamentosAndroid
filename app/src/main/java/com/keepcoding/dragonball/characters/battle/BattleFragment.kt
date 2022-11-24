@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.keepcoding.dragonball.R
 import com.keepcoding.dragonball.characters.list.ListFragment
@@ -42,12 +43,20 @@ class BattleFragment(private val character:DbCharacter) : Fragment() {
                 .load(character.photo)
                 .placeholder(R.drawable.balls_image)
                 .into(ivCharacter)
+
+            pbHealth.progress = character.currentLife
         }
 
-        binding.pbHealth.progress = character.currentLife
+        setRandomCharacter()
 
+//        Toast.makeText(context,"Seleccionado ${character.name}",Toast.LENGTH_SHORT).show()
+    }
 
-        Toast.makeText(context,"Seleccionado ${character.name}",Toast.LENGTH_SHORT).show()
+    private fun setRandomCharacter(){
+
+        binding.lyRandomCharacter.apply {
+            cvCharacter.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.yellow))
+        }
     }
 
     private fun setListeners() {

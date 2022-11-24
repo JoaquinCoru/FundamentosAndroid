@@ -6,32 +6,28 @@
     android:layout_height="match_parent"
     tools:context=".characters.battle.BattleFragment">
 
-    <ProgressBar
-        android:id="@+id/pbHealth"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:max="100"
-        android:progress="50"
-        android:progressTint="@color/green"
-        android:background="@drawable/health_bar"
-        android:layout_marginTop="@dimen/margin_medium"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="@id/lySelectedCharacter"
-        app:layout_constraintEnd_toEndOf="@id/lySelectedCharacter"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:padding="5dp"/>
-
 
     <include
         android:id="@+id/lySelectedCharacter"
-        layout="@layout/list_item"
+        layout="@layout/character_battle_item"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="@dimen/margin_big"
         app:layout_constraintBottom_toTopOf="@id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/pbHealth" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <include
+        android:id="@+id/lyRandomCharacter"
+        layout="@layout/character_battle_item"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/margin_big"
+        app:layout_constraintBottom_toTopOf="@id/button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guideline" />
 
     <Button
         android:id="@+id/button"
@@ -44,21 +40,21 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
+        style="@style/TextAppearance.AppCompat.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="VS"
-        style="@style/TextAppearance.AppCompat.Title"
         android:textSize="18sp"
-        app:layout_constraintTop_toTopOf="@id/guideline"
         app:layout_constraintBottom_toBottomOf="@id/guideline"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toTopOf="@id/guideline" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.5" />
+        app:layout_constraintGuide_percent="0.45" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
