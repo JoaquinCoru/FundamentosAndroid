@@ -11,52 +11,59 @@ import kotlinx.coroutines.launch
 import okhttp3.*
 import java.io.IOException
 
-class CharactersViewModel:ViewModel() {
+class CharactersViewModel : ViewModel() {
 
-    val stateLiveData : MutableLiveData<FragmentListState> by lazy {
+    val stateLiveData: MutableLiveData<FragmentListState> by lazy {
         MutableLiveData<FragmentListState>()
     }
 
-    val selectedCharacter:MutableLiveData<DbCharacter> = MutableLiveData()
+    val charactersList: MutableLiveData<List<DbCharacter>> = MutableLiveData()
 
-    fun getCharacters(token:String){
+    val selectedCharacter: MutableLiveData<DbCharacter> = MutableLiveData()
+    val randomCharacter: MutableLiveData<DbCharacter> = MutableLiveData()
+
+    fun getCharacters(token: String) {
         println("Token: $token")
         setValueOnMainThreadToError(FragmentListState.Loading)
         val client = OkHttpClient()
         val url = "https://dragonball.keepcoding.education/api/heros/all"
         val body = FormBody.Builder()
-            .add("name","")
+            .add("name", "")
             .build()
         val request = Request.Builder()
             .url(url)
-            .addHeader("Authorization","Bearer $token")
+            .addHeader("Authorization", "Bearer $token")
             .method("POST", body)
             .build()
         val call = client.newCall(request)
 
-        call.enqueue(object :Callback{
+        call.enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 setValueOnMainThreadToError(FragmentListState.Error(e.message.toString()))
-                Log.d("Get Characters Error",e.message.toString())
+                Log.d("Get Characters Error", e.message.toString())
             }
 
             override fun onResponse(call: Call, response: Response) {
 
-                if (response.code != 200){
+                if (response.code != 200) {
                     Log.d("Error", response.message)
                     setValueOnMainThreadToError(FragmentListState.Error(response.message))
-                }else{
+                } else {
                     val responseBody = response.body?.string()
 
                     responseBody?.let {
                         Log.d("Success", it)
                     }
 
-                    val charactersDtoArray:Array<DbCharacterDto> =Gson().fromJson(responseBody,Array<DbCharacterDto>::class.java)
+                    val charactersDtoArray: Array<DbCharacterDto> =
+                        Gson().fromJson(responseBody, Array<DbCharacterDto>::class.java)
 
                     val charactersArray = charactersDtoArray.map {
-                        DbCharacter(it.id, it.name, it.description,it.photo, it.favorite)
+                        DbCharacter(it.id, it.name, it.description, it.photo, it.favorite)
                     }
+
+                    charactersList.postValue(charactersArray)
+
                     Log.d("Success", charactersArray.toString())
                     setValueOnMainThreadToError(FragmentListState.SuccessCharacters(charactersArray))
                 }
@@ -65,8 +72,25 @@ class CharactersViewModel:ViewModel() {
         })
     }
 
-    fun setSelectedCharacter(character: DbCharacter){
+    fun setSelectedCharacter(character: DbCharacter) {
         selectedCharacter.postValue(character)
+    }
+
+    fun getRandomCharacter() {
+        if (charactersList.value?.isNotEmpty() == true) {
+            var randomItem = charactersList.value!!.random()
+            println("Random item $randomItem")
+
+            if (randomItem.id != selectedCharacter.value!!.id) {
+                randomCharacter.postValue(randomItem!!)
+            } else {
+                while (randomItem.id == selectedCharacter.value!!.id) {
+                    randomItem = charactersList.value!!.random()
+                }
+                randomCharacter.postValue(randomItem!!)
+            }
+        }
+
     }
 
     fun setValueOnMainThreadToError(value: FragmentListState) {
@@ -75,9 +99,9 @@ class CharactersViewModel:ViewModel() {
         }
     }
 
-    sealed class FragmentListState{
-        data class SuccessCharacters(val characterList : List<DbCharacter>) : FragmentListState()
-        data class Error(val message : String): FragmentListState()
+    sealed class FragmentListState {
+        data class SuccessCharacters(val characterList: List<DbCharacter>) : FragmentListState()
+        data class Error(val message: String) : FragmentListState()
         object Loading : FragmentListState()
     }
 

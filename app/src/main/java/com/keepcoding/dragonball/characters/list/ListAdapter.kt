@@ -22,10 +22,13 @@ class ListAdapter(var callback: ListAdapterCallback) : Adapter<ListAdapter.ListV
     private var items = listOf<DbCharacter>()
     private var selectedPosition = -1
 
-    inner class ListViewHolder(val binding: ListItemBinding) : ViewHolder(binding.root) {
+    inner class ListViewHolder(private val binding: ListItemBinding) : ViewHolder(binding.root) {
         fun bind(item: DbCharacter, position: Int) {
+            val lifeString =  binding.tvName.context.getString(R.string.life)
+
             binding.tvName.text = item.name
-            binding.tvHealth.text ="Vida: ${item.currentLife.toString()}"
+            binding.tvHealth.text ="$lifeString ${item.currentLife}"
+
 
             Glide.with(binding.ivCharacter.context)
                 .load(item.photo)

@@ -5,10 +5,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.keepcoding.dragonball.R
+import com.keepcoding.dragonball.characters.CharactersActivity
+import com.keepcoding.dragonball.characters.CharactersViewModel
 import com.keepcoding.dragonball.characters.list.ListFragment
 import com.keepcoding.dragonball.databinding.FragmentBattleBinding
 import com.keepcoding.dragonball.model.DbCharacter
@@ -21,6 +24,9 @@ class BattleFragment(private val character:DbCharacter) : Fragment() {
     }
 
     private lateinit var binding:FragmentBattleBinding
+    private val viewModel:CharactersViewModel by activityViewModels()
+
+    var lifeText:String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,11 +40,14 @@ class BattleFragment(private val character:DbCharacter) : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setObservers()
         setListeners()
+
+        lifeText = getString(R.string.life)
 
         binding.lySelectedCharacter.apply {
             tvName.text = character.name
-            tvHealth.text ="Vida: ${character.currentLife}"
+            tvHealth.text ="$lifeText ${character.currentLife}"
             Glide.with(requireContext())
                 .load(character.photo)
                 .placeholder(R.drawable.balls_image)
@@ -49,11 +58,11 @@ class BattleFragment(private val character:DbCharacter) : Fragment() {
 
         setRandomCharacter()
 
-//        Toast.makeText(context,"Seleccionado ${character.name}",Toast.LENGTH_SHORT).show()
     }
 
     private fun setRandomCharacter(){
 
+        viewModel.getRandomCharacter()
         binding.lyRandomCharacter.apply {
             cvCharacter.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.yellow))
         }
@@ -64,6 +73,24 @@ class BattleFragment(private val character:DbCharacter) : Fragment() {
             val transaction = parentFragmentManager.beginTransaction()
             transaction.replace(R.id.container, ListFragment())
             transaction.commit()
+        }
+    }
+
+    private fun setObservers(){
+        viewModel.randomCharacter.observe(requireActivity()){
+            binding.lyRandomCharacter.apply {
+                tvName.text = it?.name
+                tvHealth.text = "$lifeText ${it?.currentLife.toString()}"
+
+                context?.let { it1 ->
+                    Glide.with(it1)
+                        .load(it?.photo)
+                        .placeholder(R.drawable.balls_image)
+                        .into(ivCharacter)
+                }
+
+                pbHealth.progress = it?.currentLife ?: 100
+            }
         }
     }
 }

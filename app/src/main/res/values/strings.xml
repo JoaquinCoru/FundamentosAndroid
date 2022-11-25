@@ -7,4 +7,5 @@
     <string name="missing_fields_message">You should complete all fields</string>
     <string name="seleccionar">Select character</string>
     <string name="back">Go Back</string>
+    <string name="life">Life:</string>
 </resources>
