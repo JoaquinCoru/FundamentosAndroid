@@ -82,10 +82,10 @@ class CharactersViewModel : ViewModel() {
             var randomItem = charactersList.value!!.random()
             println("Random item $randomItem")
 
-            if (randomItem.id != selectedCharacter.value!!.id) {
+            if (randomItem.id != selectedCharacter.value!!.id && randomItem.currentLife > 0) {
                 randomCharacter.postValue(randomItem!!)
             } else {
-                while (randomItem.id == selectedCharacter.value!!.id) {
+                while (randomItem.id == selectedCharacter.value!!.id || randomItem.currentLife == 0) {
                     randomItem = charactersList.value!!.random()
                 }
                 randomCharacter.postValue(randomItem!!)
@@ -103,7 +103,7 @@ class CharactersViewModel : ViewModel() {
         if (firstCharacter != null) {
             var resultHealth1 = firstCharacter.currentLife - damage1
 
-            if (resultHealth1<0) resultHealth1 = 0
+            if (resultHealth1<=0) resultHealth1 = 0
 
             firstCharacter.currentLife = resultHealth1
             selectedCharacter.postValue(firstCharacter!!)
@@ -112,7 +112,7 @@ class CharactersViewModel : ViewModel() {
         if (secondCharacter != null) {
             var resultHealth2 = secondCharacter.currentLife - damage2
 
-            if (resultHealth2<0) resultHealth2 = 0
+            if (resultHealth2<=0) resultHealth2 = 0
             secondCharacter.currentLife = resultHealth2
             randomCharacter.postValue(secondCharacter!!)
         }

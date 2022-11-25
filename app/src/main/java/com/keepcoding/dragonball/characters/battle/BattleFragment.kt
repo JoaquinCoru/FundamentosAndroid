@@ -1,14 +1,18 @@
 package com.keepcoding.dragonball.characters.battle
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
+import com.google.android.material.snackbar.Snackbar
 import com.keepcoding.dragonball.R
 import com.keepcoding.dragonball.characters.CharactersActivity
 import com.keepcoding.dragonball.characters.CharactersViewModel
@@ -19,10 +23,10 @@ import com.keepcoding.dragonball.model.DbCharacter
 
 class BattleFragment() : Fragment() {
 
-    private lateinit var binding:FragmentBattleBinding
-    private val viewModel:CharactersViewModel by activityViewModels()
+    private lateinit var binding: FragmentBattleBinding
+    private val viewModel: CharactersViewModel by activityViewModels()
 
-    var lifeText:String = ""
+    var lifeText: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,21 +40,25 @@ class BattleFragment() : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.btnFight.isEnabled = true
-        binding.btnBack.isEnabled = false
+        binding.tvWinner.text = ""
+        Log.d(BattleFragment::class.java.simpleName, "Pasa por onViewcreated")
 
+        setRandomCharacter()
         setObservers()
         setListeners()
 
-        setRandomCharacter()
-
     }
 
-    private fun setRandomCharacter(){
+    private fun setRandomCharacter() {
 
         viewModel.getRandomCharacter()
         binding.lyRandomCharacter.apply {
-            cvCharacter.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.yellow))
+            cvCharacter.setCardBackgroundColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.yellow
+                )
+            )
         }
     }
 
@@ -66,9 +74,11 @@ class BattleFragment() : Fragment() {
         }
     }
 
-    private fun setObservers(){
+    private fun setObservers() {
+
         lifeText = getString(R.string.life)
-        viewModel.selectedCharacter.observe(requireActivity()){
+        viewModel.selectedCharacter.observe(requireActivity()) {
+
             binding.lySelectedCharacter.apply {
                 tvName.text = it?.name
                 tvHealth.text = "$lifeText ${it?.currentLife.toString()}"
@@ -82,14 +92,26 @@ class BattleFragment() : Fragment() {
 
                 pbHealth.progress = it?.currentLife ?: 100
 
-                if (it.currentLife == 0){
+                if (it.currentLife == 0 || viewModel.randomCharacter.value?.currentLife == 0) {
                     binding.btnFight.isEnabled = false
                     binding.btnBack.isEnabled = true
+
+                    if (it.currentLife == 0 && viewModel.randomCharacter.value?.currentLife == 0) {
+                        binding.tvWinner.text = "Empate"
+                    } else
+                        if (it.currentLife == 0) {
+                            binding.tvWinner.text =
+                                "Vencedor:  ${viewModel.randomCharacter.value?.name ?: ""}"
+                        }
+                }else{
+                    binding.tvWinner.text = ""
                 }
             }
         }
 
-        viewModel.randomCharacter.observe(requireActivity()){
+        viewModel.randomCharacter.observe(requireActivity()) {
+            binding.btnFight.isEnabled = true
+            binding.btnBack.isEnabled = false
             binding.lyRandomCharacter.apply {
                 tvName.text = it?.name
                 tvHealth.text = "$lifeText ${it?.currentLife.toString()}"
@@ -103,11 +125,23 @@ class BattleFragment() : Fragment() {
 
                 pbHealth.progress = it?.currentLife ?: 100
 
-                if (it.currentLife == 0){
+                if (it.currentLife == 0 || viewModel.selectedCharacter.value?.currentLife == 0) {
                     binding.btnFight.isEnabled = false
                     binding.btnBack.isEnabled = true
+
+                    if (it.currentLife == 0 && viewModel.selectedCharacter.value?.currentLife == 0) {
+                        binding.tvWinner.text = "Empate"
+                    } else if (it.currentLife == 0) {
+                        binding.tvWinner.text =
+                            "Vencedor:  ${viewModel.selectedCharacter.value?.name ?: ""}"
+                    }
+                }else{
+                    binding.tvWinner.text = ""
                 }
+
             }
         }
     }
+
+
 }

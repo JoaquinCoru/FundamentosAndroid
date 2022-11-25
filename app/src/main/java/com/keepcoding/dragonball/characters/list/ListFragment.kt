@@ -81,7 +81,7 @@ class ListFragment : Fragment(), ListAdapterCallback {
     }*/
 
     private fun showToast(text: String) {
-        Toast.makeText(requireContext(), text, Toast.LENGTH_SHORT).show()
+        Toast.makeText(activity, text, Toast.LENGTH_SHORT).show()
     }
 
 }
