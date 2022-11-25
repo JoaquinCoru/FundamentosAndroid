@@ -35,22 +35,32 @@ class ListAdapter(var callback: ListAdapterCallback) : Adapter<ListAdapter.ListV
                 .placeholder(R.drawable.balls_image)
                 .into(binding.ivCharacter)
 
-            if (position == selectedPosition) {
-                println("Entra en posición")
-                binding.cardView.strokeColor =
-                    ContextCompat.getColor(binding.root.context, R.color.orange)
+            if (item.currentLife == 0){
+                binding.cardView.setCardBackgroundColor(ContextCompat.getColor(binding.root.context,android.R.color.darker_gray) )
+            }else{
+                binding.cardView.setCardBackgroundColor(ContextCompat.getColor(binding.root.context,R.color.teal_200) )
+                if (position == selectedPosition) {
+                    println("Entra en posición")
+                    binding.cardView.strokeColor =
+                        ContextCompat.getColor(binding.root.context, R.color.orange)
                 }else {
-                binding.cardView.strokeColor =
-                    ContextCompat.getColor(binding.root.context, R.color.white)
+                    binding.cardView.strokeColor =
+                        ContextCompat.getColor(binding.root.context, R.color.white)
+                }
             }
+
 
             binding.root.setOnClickListener {
-//                Toast.makeText(binding.root.context, item.name, Toast.LENGTH_SHORT).show()
-                selectedPosition = position
-                notifyDataSetChanged()
-                callback.onItemClicked(item)
-            }
 
+                if (item.currentLife != 0){
+                    selectedPosition = position
+                    notifyDataSetChanged()
+                    callback.onItemClicked(item)
+                }else{
+                    Toast.makeText(binding.root.context, "Personaje no seleccionable", Toast.LENGTH_SHORT).show()
+                }
+
+            }
         }
     }
 

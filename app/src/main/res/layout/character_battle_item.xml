@@ -60,7 +60,7 @@
             android:id="@+id/tvHealth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Vida: 100"
+            tools:text="Vida: 100"
             style="@style/TextAppearance.AppCompat.Subhead"
             android:textStyle="italic"
             app:layout_constraintBottom_toBottomOf="parent"

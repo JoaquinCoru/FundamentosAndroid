@@ -12,6 +12,7 @@ import okhttp3.*
 import java.io.IOException
 
 class CharactersViewModel : ViewModel() {
+    val BASE_URL = "https://dragonball.keepcoding.education/api/"
 
     val stateLiveData: MutableLiveData<FragmentListState> by lazy {
         MutableLiveData<FragmentListState>()
@@ -26,7 +27,7 @@ class CharactersViewModel : ViewModel() {
         println("Token: $token")
         setValueOnMainThreadToError(FragmentListState.Loading)
         val client = OkHttpClient()
-        val url = "https://dragonball.keepcoding.education/api/heros/all"
+        val url = "${BASE_URL}heros/all"
         val body = FormBody.Builder()
             .add("name", "")
             .build()
@@ -90,6 +91,33 @@ class CharactersViewModel : ViewModel() {
                 randomCharacter.postValue(randomItem!!)
             }
         }
+    }
+
+    fun fight(){
+        val firstCharacter = selectedCharacter.value
+        val secondCharacter = randomCharacter.value
+
+        val damage1 = (10..60).random()
+        val damage2 = (10..60).random()
+
+        if (firstCharacter != null) {
+            var resultHealth1 = firstCharacter.currentLife - damage1
+
+            if (resultHealth1<0) resultHealth1 = 0
+
+            firstCharacter.currentLife = resultHealth1
+            selectedCharacter.postValue(firstCharacter!!)
+        }
+
+        if (secondCharacter != null) {
+            var resultHealth2 = secondCharacter.currentLife - damage2
+
+            if (resultHealth2<0) resultHealth2 = 0
+            secondCharacter.currentLife = resultHealth2
+            randomCharacter.postValue(secondCharacter!!)
+        }
+
+
 
     }
 

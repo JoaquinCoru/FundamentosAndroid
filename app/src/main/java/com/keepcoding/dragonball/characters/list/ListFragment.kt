@@ -1,6 +1,6 @@
 package com.keepcoding.dragonball.characters.list
 
-import android.content.Context
+
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -9,17 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.keepcoding.dragonball.R
-import com.keepcoding.dragonball.characters.CharactersActivity
 import com.keepcoding.dragonball.characters.battle.BattleFragment
 import com.keepcoding.dragonball.characters.CharactersViewModel
 import com.keepcoding.dragonball.databinding.FragmentListBinding
 import com.keepcoding.dragonball.model.DbCharacter
 
 class ListFragment : Fragment(), ListAdapterCallback {
-
 
     private lateinit var binding:FragmentListBinding
     private val viewModel:CharactersViewModel by activityViewModels()
@@ -67,21 +64,21 @@ class ListFragment : Fragment(), ListAdapterCallback {
     }
 
     private fun setListeners() {
-        binding.button.setOnClickListener {
+        binding.btnSelect.setOnClickListener {
             val transaction = parentFragmentManager.beginTransaction()
-            transaction.replace(R.id.container, BattleFragment(viewModel.selectedCharacter.value ?: defaultCharacter() ))
+            transaction.replace(R.id.container, BattleFragment())
             transaction.commit()
         }
     }
 
     override fun onItemClicked(item: DbCharacter) {
-        binding.button.isEnabled = true
+        binding.btnSelect.isEnabled = true
         viewModel.setSelectedCharacter(item)
     }
 
-    private fun defaultCharacter():DbCharacter{
+/*    private fun defaultCharacter():DbCharacter{
         return DbCharacter("D13A40E5-4418-4223-9CE6-D2F9A28EBE94","Goku","","https://cdn.alfabetajuega.com/alfabetajuega/2020/12/goku1.jpg?width=300",true)
-    }
+    }*/
 
     private fun showToast(text: String) {
         Toast.makeText(requireContext(), text, Toast.LENGTH_SHORT).show()
