@@ -15,4 +15,6 @@
     <string name="non_selectable">Personaje no seleccionable</string>
     <string name="tie">Empate</string>
     <string name="exit">Salir</string>
+    <string name="reset">Borrar</string>
+    <string name="restart">Reiniciar</string>
 </resources>

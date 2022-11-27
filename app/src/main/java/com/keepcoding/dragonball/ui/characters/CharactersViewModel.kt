@@ -20,7 +20,7 @@ class CharactersViewModel : ViewModel() {
         MutableLiveData<FragmentListState>()
     }
 
-    val charactersList: MutableLiveData<List<DbCharacter>> = MutableLiveData()
+    val charactersList: MutableLiveData<List<DbCharacter>?> = MutableLiveData()
 
     val selectedCharacter: MutableLiveData<DbCharacter> = MutableLiveData()
     val randomCharacter: MutableLiveData<DbCharacter> = MutableLiveData()
@@ -64,7 +64,6 @@ class CharactersViewModel : ViewModel() {
                         Gson().fromJson(responseBody, Array<DbCharacterDto>::class.java)
 
                     val charactersArray = charactersDtoArray.map {
-
                         if (it.name == "Goku" || it.name == "Vegeta") {
                             DbCharacter(it.id, it.name, it.description, it.photo, it.favorite)
                         } else {
@@ -153,6 +152,19 @@ class CharactersViewModel : ViewModel() {
             return DbCharacter("", "", "", "", false)
         }
         return null
+    }
+
+    fun reset(){
+        val newCharactersList = charactersList.value?.map {
+
+            DbCharacter(it.id, it.name, it.description, it.photo, it.favorite, 100, 100)
+        }
+
+        Log.d("Lista", newCharactersList.toString())
+
+        charactersAlive.postValue(newCharactersList?.count())
+        charactersList.postValue(newCharactersList)
+        setValueOnMainThreadToError(FragmentListState.SuccessCharacters(newCharactersList ?: listOf()))
     }
 
     fun setValueOnMainThreadToError(value: FragmentListState) {

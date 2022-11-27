@@ -33,12 +33,27 @@
                 style="@style/TextAppearance.AppCompat.Headline"
                 tools:text="Vencedor" />
 
-            <Button
-                android:id="@+id/exitButton"
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_medium"
-                android:text="@string/exit"/>
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/exitButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_medium"
+                    android:text="@string/exit"/>
+
+                <Button
+                    android:id="@+id/resetButton"
+                    android:backgroundTint="@color/blue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_medium"
+                    android:layout_marginTop="@dimen/margin_medium"
+                    android:text="@string/restart"/>
+
+            </LinearLayout>
 
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>

@@ -72,7 +72,7 @@ class ListFragment : Fragment(), ListAdapterCallback {
                 }else{
                     binding.lyExitWindow.tvWinner.text = "${context?.getString(R.string.winner)} ${viewModel.getSurvivor()?.name}"
                 }
-                binding.rvCharacters.isClickable = false
+                binding.btnReset.isEnabled = false
                 binding.lyExitWindow.clExitWindow.visibility = View.VISIBLE
             }
 
@@ -92,6 +92,16 @@ class ListFragment : Fragment(), ListAdapterCallback {
 
         binding.lyExitWindow.exitButton.setOnClickListener {
             exitProcess(0)
+        }
+
+        binding.btnReset.setOnClickListener {
+            viewModel.reset()
+        }
+
+        binding.lyExitWindow.resetButton.setOnClickListener {
+            binding.lyExitWindow.clExitWindow.visibility = View.INVISIBLE
+            viewModel.reset()
+            binding.btnReset.isEnabled = true
         }
     }
 
