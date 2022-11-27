@@ -17,4 +17,7 @@
     <string name="exit">Salir</string>
     <string name="reset">Borrar</string>
     <string name="restart">Reiniciar</string>
+    <string name="select_n">Selecc Nº</string>
+    <string name="selected_character">Personaje seleccionado</string>
+    <string name="times">veces</string>
 </resources>

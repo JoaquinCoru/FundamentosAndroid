@@ -8,7 +8,8 @@ data class DbCharacter(
     val favorite: Boolean,
     var maxLife: Int = 100,
     var currentLife: Int = 100,
-    var isSelected:Boolean = false
+    var isSelected:Boolean = false,
+    var selectionNumber:Int = 0
 )
 
 

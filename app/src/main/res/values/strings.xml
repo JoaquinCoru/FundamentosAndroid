@@ -16,4 +16,7 @@
     <string name="exit">Exit</string>
     <string name="restart">Restart</string>
     <string name="reset">Reset</string>
+    <string name="select_n">Select Nº</string>
+    <string name="times">times</string>
+    <string name="selected_character">Character selected</string>
 </resources>

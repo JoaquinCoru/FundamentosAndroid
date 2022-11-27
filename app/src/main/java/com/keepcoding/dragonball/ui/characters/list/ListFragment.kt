@@ -68,14 +68,13 @@ class ListFragment : Fragment(), ListAdapterCallback {
         viewModel.charactersAlive.observe(requireActivity()){
             if (it <= 1){
                 if (viewModel.getSurvivor()?.name?.isBlank() == true){
-                    binding.lyExitWindow.tvWinner.text = context?.getString(R.string.game_over) ?:"Juego terminado"
+                    binding.lyExitWindow.tvWinner.text = context?.getString(R.string.game_over)
                 }else{
                     binding.lyExitWindow.tvWinner.text = "${context?.getString(R.string.winner)} ${viewModel.getSurvivor()?.name}"
                 }
                 binding.btnReset.isEnabled = false
                 binding.lyExitWindow.clExitWindow.visibility = View.VISIBLE
             }
-
             else
                 binding.lyExitWindow.clExitWindow.visibility = View.INVISIBLE
         }
@@ -84,7 +83,6 @@ class ListFragment : Fragment(), ListAdapterCallback {
 
     private fun setListeners() {
         binding.btnSelect.setOnClickListener {
-
             val transaction = parentFragmentManager.beginTransaction()
             transaction.replace(R.id.container, BattleFragment())
             transaction.commit()

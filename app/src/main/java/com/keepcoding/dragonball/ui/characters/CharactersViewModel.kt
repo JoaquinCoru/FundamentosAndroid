@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
+import com.keepcoding.dragonball.R
 import com.keepcoding.dragonball.model.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -64,12 +65,7 @@ class CharactersViewModel : ViewModel() {
                         Gson().fromJson(responseBody, Array<DbCharacterDto>::class.java)
 
                     val charactersArray = charactersDtoArray.map {
-                        if (it.name == "Goku" || it.name == "Vegeta") {
-                            DbCharacter(it.id, it.name, it.description, it.photo, it.favorite)
-                        } else {
-                            DbCharacter(it.id, it.name, it.description, it.photo, it.favorite, 0, 0)
-                        }
-
+                        DbCharacter(it.id, it.name, it.description, it.photo, it.favorite)
                     }
 
                     charactersList.postValue(charactersArray)
@@ -84,6 +80,7 @@ class CharactersViewModel : ViewModel() {
     }
 
     fun setSelectedCharacter(character: DbCharacter) {
+        character.selectionNumber += 1
         selectedCharacter.postValue(character)
     }
 
@@ -154,7 +151,7 @@ class CharactersViewModel : ViewModel() {
         return null
     }
 
-    fun reset(){
+    fun reset() {
         val newCharactersList = charactersList.value?.map {
 
             DbCharacter(it.id, it.name, it.description, it.photo, it.favorite, 100, 100)
@@ -164,7 +161,19 @@ class CharactersViewModel : ViewModel() {
 
         charactersAlive.postValue(newCharactersList?.count())
         charactersList.postValue(newCharactersList)
-        setValueOnMainThreadToError(FragmentListState.SuccessCharacters(newCharactersList ?: listOf()))
+        setValueOnMainThreadToError(
+            FragmentListState.SuccessCharacters(
+                newCharactersList ?: listOf()
+            )
+        )
+    }
+
+    fun showSelectionNumber(context: Context) {
+        Toast.makeText(
+            context,
+            "${context.getString(R.string.selected_character)} ${selectedCharacter.value?.selectionNumber} ${context.getString(R.string.times)}",
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
     fun setValueOnMainThreadToError(value: FragmentListState) {

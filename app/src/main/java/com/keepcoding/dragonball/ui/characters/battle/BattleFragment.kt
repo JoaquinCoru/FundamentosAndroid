@@ -72,6 +72,10 @@ class BattleFragment() : Fragment() {
         binding.btnFight.setOnClickListener {
             viewModel.fight()
         }
+
+        binding.btnNumber.setOnClickListener {
+            viewModel.showSelectionNumber(requireContext())
+        }
     }
 
     private fun setObservers() {
