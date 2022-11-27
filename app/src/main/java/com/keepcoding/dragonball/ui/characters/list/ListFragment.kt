@@ -1,4 +1,4 @@
-package com.keepcoding.dragonball.characters.list
+package com.keepcoding.dragonball.ui.characters.list
 
 
 import android.os.Bundle
@@ -11,15 +11,16 @@ import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.keepcoding.dragonball.R
-import com.keepcoding.dragonball.characters.battle.BattleFragment
-import com.keepcoding.dragonball.characters.CharactersViewModel
+import com.keepcoding.dragonball.ui.characters.battle.BattleFragment
+import com.keepcoding.dragonball.ui.characters.CharactersViewModel
 import com.keepcoding.dragonball.databinding.FragmentListBinding
 import com.keepcoding.dragonball.model.DbCharacter
+import kotlin.system.exitProcess
 
 class ListFragment : Fragment(), ListAdapterCallback {
 
     private lateinit var binding:FragmentListBinding
-    private val viewModel:CharactersViewModel by activityViewModels()
+    private val viewModel: CharactersViewModel by activityViewModels()
     private val adapter = ListAdapter(this)
 
     override fun onCreateView(
@@ -36,6 +37,8 @@ class ListFragment : Fragment(), ListAdapterCallback {
 
         setObservers()
         setListeners()
+
+        viewModel.checkSurvivors(requireContext())
     }
 
     private fun setObservers(){
@@ -61,24 +64,50 @@ class ListFragment : Fragment(), ListAdapterCallback {
                 }
             }
         }
+
+        viewModel.charactersAlive.observe(requireActivity()){
+            if (it <= 1){
+                if (viewModel.getSurvivor()?.name?.isBlank() == true){
+                    binding.lyExitWindow.tvWinner.text = context?.getString(R.string.game_over) ?:"Juego terminado"
+                }else{
+                    binding.lyExitWindow.tvWinner.text = "${context?.getString(R.string.winner)} ${viewModel.getSurvivor()?.name}"
+                }
+                binding.rvCharacters.isClickable = false
+                binding.lyExitWindow.clExitWindow.visibility = View.VISIBLE
+            }
+
+            else
+                binding.lyExitWindow.clExitWindow.visibility = View.INVISIBLE
+        }
+
     }
 
     private fun setListeners() {
         binding.btnSelect.setOnClickListener {
+
             val transaction = parentFragmentManager.beginTransaction()
             transaction.replace(R.id.container, BattleFragment())
             transaction.commit()
         }
+
+        binding.lyExitWindow.exitButton.setOnClickListener {
+            exitProcess(0)
+        }
     }
 
     override fun onItemClicked(item: DbCharacter) {
-        binding.btnSelect.isEnabled = true
-        viewModel.setSelectedCharacter(item)
+        viewModel.charactersAlive.observe(requireActivity()){ survivorsNumber ->
+            if (survivorsNumber <= 1){
+                binding.btnSelect.isEnabled = false
+
+            }else{
+                binding.btnSelect.isEnabled = true
+                viewModel.setSelectedCharacter(item)
+            }
+        }
+
     }
 
-/*    private fun defaultCharacter():DbCharacter{
-        return DbCharacter("D13A40E5-4418-4223-9CE6-D2F9A28EBE94","Goku","","https://cdn.alfabetajuega.com/alfabetajuega/2020/12/goku1.jpg?width=300",true)
-    }*/
 
     private fun showToast(text: String) {
         Toast.makeText(activity, text, Toast.LENGTH_SHORT).show()

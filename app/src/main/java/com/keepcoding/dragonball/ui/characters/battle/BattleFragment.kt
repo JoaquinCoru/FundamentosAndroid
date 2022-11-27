@@ -1,4 +1,4 @@
-package com.keepcoding.dragonball.characters.battle
+package com.keepcoding.dragonball.ui.characters.battle
 
 import android.content.Context
 import android.os.Bundle
@@ -14,9 +14,9 @@ import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.keepcoding.dragonball.R
-import com.keepcoding.dragonball.characters.CharactersActivity
-import com.keepcoding.dragonball.characters.CharactersViewModel
-import com.keepcoding.dragonball.characters.list.ListFragment
+import com.keepcoding.dragonball.ui.characters.CharactersActivity
+import com.keepcoding.dragonball.ui.characters.CharactersViewModel
+import com.keepcoding.dragonball.ui.characters.list.ListFragment
 import com.keepcoding.dragonball.databinding.FragmentBattleBinding
 import com.keepcoding.dragonball.model.DbCharacter
 
@@ -97,11 +97,11 @@ class BattleFragment() : Fragment() {
                     binding.btnBack.isEnabled = true
 
                     if (it.currentLife == 0 && viewModel.randomCharacter.value?.currentLife == 0) {
-                        binding.tvWinner.text = "Empate"
+                        binding.tvWinner.text = "${context?.getString(R.string.tie)}"
                     } else
                         if (it.currentLife == 0) {
                             binding.tvWinner.text =
-                                "Vencedor:  ${viewModel.randomCharacter.value?.name ?: ""}"
+                                "${context?.getString(R.string.winner)}  ${viewModel.randomCharacter.value?.name ?: ""}"
                         }
                 }else{
                     binding.tvWinner.text = ""
@@ -130,16 +130,20 @@ class BattleFragment() : Fragment() {
                     binding.btnBack.isEnabled = true
 
                     if (it.currentLife == 0 && viewModel.selectedCharacter.value?.currentLife == 0) {
-                        binding.tvWinner.text = "Empate"
+                        binding.tvWinner.text = "${context?.getString(R.string.tie)}"
                     } else if (it.currentLife == 0) {
                         binding.tvWinner.text =
-                            "Vencedor:  ${viewModel.selectedCharacter.value?.name ?: ""}"
+                            "${context?.getString(R.string.winner)}  ${viewModel.selectedCharacter.value?.name ?: ""}"
                     }
                 }else{
                     binding.tvWinner.text = ""
                 }
 
             }
+        }
+
+        viewModel.charactersAlive.observe(requireActivity()){
+            Log.d("Battle Fragment","Vivos $it")
         }
     }
 

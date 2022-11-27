@@ -1,4 +1,4 @@
-package com.keepcoding.dragonball.characters
+package com.keepcoding.dragonball.ui.characters
 
 import android.content.Context
 import android.content.Intent
@@ -7,13 +7,13 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import com.keepcoding.dragonball.characters.list.ListFragment
+import com.keepcoding.dragonball.ui.characters.list.ListFragment
 import com.keepcoding.dragonball.databinding.ActivityCharactersBinding
 
 class CharactersActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCharactersBinding
-    private val viewModel:CharactersViewModel by viewModels()
+    private val viewModel: CharactersViewModel by viewModels()
 
     companion object {
 

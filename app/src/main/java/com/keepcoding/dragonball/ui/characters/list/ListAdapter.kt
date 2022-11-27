@@ -1,4 +1,4 @@
-package com.keepcoding.dragonball.characters.list
+package com.keepcoding.dragonball.ui.characters.list
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -37,6 +37,8 @@ class ListAdapter(var callback: ListAdapterCallback) : Adapter<ListAdapter.ListV
 
             if (item.currentLife == 0){
                 binding.cardView.setCardBackgroundColor(ContextCompat.getColor(binding.root.context,android.R.color.darker_gray) )
+                binding.cardView.strokeColor =
+                    ContextCompat.getColor(binding.root.context, R.color.white)
             }else{
                 binding.cardView.setCardBackgroundColor(ContextCompat.getColor(binding.root.context,R.color.teal_200) )
                 if (position == selectedPosition) {
@@ -49,15 +51,13 @@ class ListAdapter(var callback: ListAdapterCallback) : Adapter<ListAdapter.ListV
                 }
             }
 
-
             binding.root.setOnClickListener {
-
+                selectedPosition = position
                 if (item.currentLife != 0){
-                    selectedPosition = position
-                    notifyDataSetChanged()
                     callback.onItemClicked(item)
+                    notifyDataSetChanged()
                 }else{
-                    Toast.makeText(binding.root.context, "Personaje no seleccionable", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(binding.root.context, binding.root.context.getString(R.string.non_selectable), Toast.LENGTH_SHORT).show()
                 }
 
             }

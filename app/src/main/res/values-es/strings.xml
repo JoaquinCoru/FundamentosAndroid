@@ -10,4 +10,9 @@
     <string name="back">Volver</string>
     <string name="life">Vida:</string>
     <string name="fight">Luchar</string>
+    <string name="game_over">Juego terminado</string>
+    <string name="winner">Ganador</string>
+    <string name="non_selectable">Personaje no seleccionable</string>
+    <string name="tie">Empate</string>
+    <string name="exit">Salir</string>
 </resources>

@@ -9,4 +9,9 @@
     <string name="back">Go Back</string>
     <string name="life">Life:</string>
     <string name="fight">Fight</string>
+    <string name="game_over">Game over</string>
+    <string name="winner">Winner</string>
+    <string name="non_selectable">Non selectable character</string>
+    <string name="tie">Tie</string>
+    <string name="exit">Exit</string>
 </resources>

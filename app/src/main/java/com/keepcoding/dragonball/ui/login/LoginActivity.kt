@@ -1,4 +1,4 @@
-package com.keepcoding.dragonball.login
+package com.keepcoding.dragonball.ui.login
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
@@ -9,7 +9,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.widget.doAfterTextChanged
 import com.keepcoding.dragonball.R
-import com.keepcoding.dragonball.characters.CharactersActivity
+import com.keepcoding.dragonball.ui.characters.CharactersActivity
 import com.keepcoding.dragonball.databinding.LoginConstraintBinding
 
 class LoginActivity : AppCompatActivity() {

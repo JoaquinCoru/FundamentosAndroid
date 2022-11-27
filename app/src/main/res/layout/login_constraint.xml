@@ -7,7 +7,7 @@
     android:background="@drawable/fondo2"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context=".login.LoginActivity">
+    tools:context=".ui.login.LoginActivity">
 
 <!--
     <TextView

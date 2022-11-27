@@ -1,6 +1,8 @@
-package com.keepcoding.dragonball.characters
+package com.keepcoding.dragonball.ui.characters
 
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -22,6 +24,8 @@ class CharactersViewModel : ViewModel() {
 
     val selectedCharacter: MutableLiveData<DbCharacter> = MutableLiveData()
     val randomCharacter: MutableLiveData<DbCharacter> = MutableLiveData()
+
+    val charactersAlive: MutableLiveData<Int> = MutableLiveData()
 
     fun getCharacters(token: String) {
         println("Token: $token")
@@ -60,10 +64,17 @@ class CharactersViewModel : ViewModel() {
                         Gson().fromJson(responseBody, Array<DbCharacterDto>::class.java)
 
                     val charactersArray = charactersDtoArray.map {
-                        DbCharacter(it.id, it.name, it.description, it.photo, it.favorite)
+
+                        if (it.name == "Goku" || it.name == "Vegeta") {
+                            DbCharacter(it.id, it.name, it.description, it.photo, it.favorite)
+                        } else {
+                            DbCharacter(it.id, it.name, it.description, it.photo, it.favorite, 0, 0)
+                        }
+
                     }
 
                     charactersList.postValue(charactersArray)
+                    charactersAlive.postValue(charactersArray.count())
 
                     Log.d("Success", charactersArray.toString())
                     setValueOnMainThreadToError(FragmentListState.SuccessCharacters(charactersArray))
@@ -83,17 +94,17 @@ class CharactersViewModel : ViewModel() {
             println("Random item $randomItem")
 
             if (randomItem.id != selectedCharacter.value!!.id && randomItem.currentLife > 0) {
-                randomCharacter.postValue(randomItem!!)
+                randomCharacter.postValue(randomItem)
             } else {
                 while (randomItem.id == selectedCharacter.value!!.id || randomItem.currentLife == 0) {
                     randomItem = charactersList.value!!.random()
                 }
-                randomCharacter.postValue(randomItem!!)
+                randomCharacter.postValue(randomItem)
             }
         }
     }
 
-    fun fight(){
+    fun fight() {
         val firstCharacter = selectedCharacter.value
         val secondCharacter = randomCharacter.value
 
@@ -103,7 +114,9 @@ class CharactersViewModel : ViewModel() {
         if (firstCharacter != null) {
             var resultHealth1 = firstCharacter.currentLife - damage1
 
-            if (resultHealth1<=0) resultHealth1 = 0
+            if (resultHealth1 <= 0) {
+                resultHealth1 = 0
+            }
 
             firstCharacter.currentLife = resultHealth1
             selectedCharacter.postValue(firstCharacter!!)
@@ -112,13 +125,34 @@ class CharactersViewModel : ViewModel() {
         if (secondCharacter != null) {
             var resultHealth2 = secondCharacter.currentLife - damage2
 
-            if (resultHealth2<=0) resultHealth2 = 0
+            if (resultHealth2 <= 0) {
+                resultHealth2 = 0
+            }
             secondCharacter.currentLife = resultHealth2
             randomCharacter.postValue(secondCharacter!!)
         }
 
+    }
 
+    fun checkSurvivors(context: Context) {
+        getSurvivor().let {
+            if (it != null) {
+                if (it.name.isBlank()) charactersAlive.postValue(0)
+                else charactersAlive.postValue(1)
+            }
+        }
+    }
 
+    fun getSurvivor(): DbCharacter? {
+        val aliveCharacters = charactersList.value?.filter { it.currentLife > 0 }
+
+        if (aliveCharacters?.count() == 1) {
+            return aliveCharacters[0]
+        }
+        if (aliveCharacters?.isEmpty() == true) {
+            return DbCharacter("", "", "", "", false)
+        }
+        return null
     }
 
     fun setValueOnMainThreadToError(value: FragmentListState) {

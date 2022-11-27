@@ -1,4 +1,4 @@
-package com.keepcoding.dragonball.login
+package com.keepcoding.dragonball.ui.login
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
